@@ -37,8 +37,8 @@ jobs:
           name: install node
           command: |
             apt-get update
-            sudo curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo bash -
-            sudo apt install nodejs -y
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo bash -
+            apt install nodejs -y
       - run:
           name: install dependencies
           command: npm i
@@ -55,4 +55,6 @@ workflows:
   my-workflow:
     jobs:
       - build-backend
-      - test-migration
+      - test-migration:
+          requires:
+            - build-backend
