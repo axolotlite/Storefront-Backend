@@ -5,7 +5,9 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:18.7.0
-
+  postgres-executor:
+    docker:
+      - image: postgres:bullseye
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -23,7 +25,27 @@ jobs:
           key: node-modules
           paths:
             - node_modules
-  
+  test-migration:
+    executor: postgres-executor
+    steps:
+      - checkout
+      - restore_cache:
+          key: node-modules
+      - run:
+          name: install node
+          command: |
+            apt-get update
+            sudo curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo bash -
+            sudo apt install nodejs -y
+      - run:
+          name: install dependencies
+          command: npm i
+      - run:
+          name: migration
+          command: npm run dev-up
+      - run:
+          name: test database
+          command: npm run db-test
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
