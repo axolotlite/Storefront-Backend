@@ -15,6 +15,8 @@ jobs:
     executor: node-executor
     steps:
       - checkout
+      - restore_cache:
+          key: node-modules
       - run:
           name: "install dependencies"
           command: npm i
@@ -53,3 +55,4 @@ workflows:
   my-workflow:
     jobs:
       - build-backend
+      - test-migration
