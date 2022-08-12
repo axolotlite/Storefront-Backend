@@ -18,6 +18,9 @@ jobs:
       - restore_cache:
           key: node-modules
       - run:
+          name: install modules
+          command: npm i
+      - run:
           name: start application
           command: npm run start
   build-backend:
@@ -42,6 +45,9 @@ jobs:
       - checkout
       - restore_cache:
           key: node-modules
+      - run:
+          name: wait for 15 secs
+          command: sleep 15
       - run:
           name: update pacakges
           command: apt update
@@ -69,6 +75,4 @@ workflows:
   my-workflow:
     jobs:
       - start-app
-      - test-migration:
-          requires:
-            - start-app
+      - test-migration
