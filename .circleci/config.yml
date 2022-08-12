@@ -11,6 +11,15 @@ executors:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
+  start-app:
+    executor: node-executor
+    steps:
+      - checkout
+      - restore_cache:
+          key: node-modules
+      - run:
+          name: start application
+          command: npm run start
   build-backend:
     executor: node-executor
     steps:
@@ -59,7 +68,7 @@ jobs:
 workflows:
   my-workflow:
     jobs:
-      - build-backend
+      - start-app
       - test-migration:
           requires:
-            - build-backend
+            - start-app
