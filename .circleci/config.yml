@@ -34,10 +34,15 @@ jobs:
       - restore_cache:
           key: node-modules
       - run:
+          name: update pacakges
+          command: apt update
+      - run:
+          name: install curl
+          command : apt install curl -y
+      - run:
           name: install node
           command: |
-            apt-get update
-            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo bash -
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
             apt install nodejs -y
       - run:
           name: install dependencies
